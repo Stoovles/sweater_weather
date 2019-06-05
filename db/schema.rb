@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 2019_06_05_155506) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "cities", force: :cascade do |t|
     t.string "city"
     t.string "state"
@@ -33,7 +36,7 @@ ActiveRecord::Schema.define(version: 2019_06_05_155506) do
     t.string "futureSummary"
     t.decimal "temperatureHigh"
     t.decimal "temperatureLow"
-    t.integer "city_id"
+    t.bigint "city_id"
     t.index ["city_id"], name: "index_currently_forecasts_on_city_id"
   end
 
@@ -44,15 +47,15 @@ ActiveRecord::Schema.define(version: 2019_06_05_155506) do
     t.decimal "precipProbability"
     t.decimal "temperatureHigh"
     t.decimal "temperatureLow"
-    t.integer "city_id"
+    t.bigint "city_id"
     t.index ["city_id"], name: "index_daily_forecasts_on_city_id"
   end
 
   create_table "favorites", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "city_id"
+    t.bigint "user_id"
+    t.bigint "city_id"
     t.index ["city_id"], name: "index_favorites_on_city_id"
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
@@ -60,7 +63,7 @@ ActiveRecord::Schema.define(version: 2019_06_05_155506) do
   create_table "hourly_forecasts", force: :cascade do |t|
     t.integer "time"
     t.decimal "temperature"
-    t.integer "city_id"
+    t.bigint "city_id"
     t.index ["city_id"], name: "index_hourly_forecasts_on_city_id"
   end
 
@@ -72,4 +75,9 @@ ActiveRecord::Schema.define(version: 2019_06_05_155506) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "currently_forecasts", "cities"
+  add_foreign_key "daily_forecasts", "cities"
+  add_foreign_key "favorites", "cities"
+  add_foreign_key "favorites", "users"
+  add_foreign_key "hourly_forecasts", "cities"
 end

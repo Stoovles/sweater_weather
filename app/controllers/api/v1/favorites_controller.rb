@@ -6,7 +6,7 @@ class Api::V1::FavoritesController < ApplicationController
   end
 
   def create
-    if @user.favorites.where(user_id: @user.id).where(city_id: current_city[0].id).exists?
+    if @user.cities.where(city: city_attr, state: state_attr).exists?
       render json: { :response => "Already favorited" , status: :conflict }
     else
       if current_city.exists?
